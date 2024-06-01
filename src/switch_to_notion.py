@@ -1,5 +1,10 @@
+import os
 import time
 import pygetwindow as gw
+from dotenv import load_dotenv
+
+load_dotenv()
+countdownLength = int(os.getenv('COUNTDOWN_LENGTH', '5'))
 
 
 def prompt_user_to_switch_to_notion(text_to_show_after_switch: str = 'Countdown starting...'):
@@ -17,9 +22,8 @@ def prompt_user_to_switch_to_notion(text_to_show_after_switch: str = 'Countdown 
             time.sleep(1)
 
     print(text_to_show_after_switch)
-    for i in range(5, 0, -1):
+    for i in range(countdownLength, 0, -1):
         print(f"{i}...")
         time.sleep(1)
 
     print("Countdown complete.")
-
