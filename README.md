@@ -35,7 +35,24 @@ These variables define the separators for inline and block mathematical equation
 - `BLOCK_MATHE_EQUATION_SEPARATOR_START` (string): The starting delimiter for block math equations. Default is `\[` for ChatGPT output. Markdown uses `$$`.
 - `BLOCK_MATHE_EQUATION_SEPARATOR_END` (string): The ending delimiter for block math equations. Default is `\]` for ChatGPT output. Markdown uses `$`.
 
+### Example
 
+```bash
+TIME_TO_SLEEP=0.02
+COUNTDOWN_LENGTH=5
+
+## ChatGPT
+# INLINE_MATHE_EQUATION_SEPARATOR_START=\(
+# INLINE_MATHE_EQUATION_SEPARATOR_END=\)
+# BLOCK_MATHE_EQUATION_SEPARATOR_START=\[
+# BLOCK_MATHE_EQUATION_SEPARATOR_END=\]
+
+## Markdown
+INLINE_MATHE_EQUATION_SEPARATOR_START=$
+INLINE_MATHE_EQUATION_SEPARATOR_END=$
+BLOCK_MATHE_EQUATION_SEPARATOR_START=$$
+BLOCK_MATHE_EQUATION_SEPARATOR_END=$$
+```
 
 ## Execution
 
@@ -57,5 +74,5 @@ The user should not interact with the computer till the programm has finished.
 To make a new build, execute the following command:
 
 ```bash
-pipenv run pyinstaller --onefile src/main.py
+pyinstaller --onefile main.py
 ```
