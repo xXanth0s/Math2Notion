@@ -1,8 +1,23 @@
-# Markdown Math To Notion
+# Math2Notion
 
 This application allows you to insert Markdown text containing mathematical formulas into Notion so that they are displayed correctly in Notion.
 The text is formatted accordingly, pasted into Notion and then automatically adapted in Notion itself using a shortcut. 
 This tool is particularly useful when copying output from ChatGPT to Notion.
+
+## Usage
+### Mac
+Go to the [latest release](https://github.com/xXanth0s/Math2Notion/releases/tag/v0.0.1) and download the executable for normal Markdown or ChatGPT output.
+Start the executable, a console window will open and ask for the markdown text containing the mathematical formulas.
+Add `END` at the end of the text to indicate that the text is complete and approve with `enter`.
+After the text was passed, the programm waits, till the user switches to the notion app.
+When the user has switched to the notion app, the programm will start a countdown.
+After the countdown, the programm will insert a preformatted text and manipulate the text in notion to display the mathematical formulas correctly.
+The user should not interact with the computer till the programm has finished.
+
+### Windows
+No support for Windows yet.
+
+# Development
 
 ## Installation
 
@@ -54,20 +69,7 @@ BLOCK_MATHE_EQUATION_SEPARATOR_START=$$
 BLOCK_MATHE_EQUATION_SEPARATOR_END=$$
 ```
 
-## Execution
 
-After installing the dependencies, you can run the main script of the project with `pipenv`:
-
-```bash
-pipenv run python src/main.py
-```
-
-The programm will ask for the markdown text containing the mathematical formulas. 
-Add `END` at the end of the text to indicate that the text is complete and approve with `enter`.
-After you have pasted the text, the programm waits, till the user switches to the notion app.
-When the user has switched to the notion app, the programm will start a countdown.
-After the countdown, the programm will insert a preformatted text and manipulate the text in notion to display the mathematical formulas correctly.
-The user should not interact with the computer till the programm has finished.
 
 ## Build
 
