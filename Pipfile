@@ -8,6 +8,7 @@ python-dotenv = "*"
 pyautogui = "*"
 pyperclip = "*"
 pygetwindow = "*"
+pyinstaller = "*"
 
 [dev-packages]
 

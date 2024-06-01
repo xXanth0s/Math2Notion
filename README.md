@@ -46,8 +46,16 @@ pipenv run python src/main.py
 ```
 
 The programm will ask for the markdown text containing the mathematical formulas. 
-Approve that with `CMD + D`.
+Add `END` at the end of the text to indicate that the text is complete and approve with `enter`.
 After you have pasted the text, the programm waits, till the user switches to the notion app.
 When the user has switched to the notion app, the programm will start a countdown.
 After the countdown, the programm will insert a preformatted text and manipulate the text in notion to display the mathematical formulas correctly.
 The user should not interact with the computer till the programm has finished.
+
+## Build
+
+To make a new build, execute the following command:
+
+```bash
+pipenv run pyinstaller --onefile src/main.py
+```

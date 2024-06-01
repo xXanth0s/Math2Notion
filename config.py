@@ -20,6 +20,5 @@ class Config:
         self.INLINE_MATHE_EQUATION_SEPARATOR_END = os.getenv('INLINE_MATHE_EQUATION_SEPARATOR_END', '\\)')
         self.BLOCK_MATHE_EQUATION_SEPARATOR_START = os.getenv('BLOCK_MATHE_EQUATION_SEPARATOR_START', '\\[')
         self.BLOCK_MATHE_EQUATION_SEPARATOR_END = os.getenv('BLOCK_MATHE_EQUATION_SEPARATOR_END', '\\]')
-
 # Create an instance of the Config class to use across the project
 config = Config()

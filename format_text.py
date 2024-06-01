@@ -1,7 +1,7 @@
 import re
 from typing import List
 from config import config  # Import the config instance from the config module
-from src.models import TextBlock
+from models import TextBlock
 
 def markdown_to_array(markdown_text: str) -> List[str]:
     """Splits the Markdown text into lines."""
