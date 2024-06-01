@@ -17,6 +17,26 @@ pip install pipenv
 pipenv install
 ```
 
+## Configuration
+
+To customize the behavior of the application, you can set various environment variables in a `.env` file. Below is a list of the available variables and their descriptions.
+
+### Environment Variables
+
+- `TIME_TO_SLEEP` (float): The time in seconds to wait between keyboard inputs. Default is `0.02`.
+- `COUNTDOWN_LENGTH` (int): The length of countdown in seconds, after the user has switched to notion and the programm will insert and manipulate the text. Default is `5`.
+
+### Markdown 
+
+These variables define the separators for inline and block mathematical equations:
+
+- `INLINE_MATHE_EQUATION_SEPARATOR_START` (string): The starting delimiter for inline math equations. Default is `\(` for ChatGPT output. Markdown uses `$`.
+- `INLINE_MATHE_EQUATION_SEPARATOR_END` (string): The ending delimiter for inline math equations. Default is `\)` for ChatGPT output. Markdown uses `$`.
+- `BLOCK_MATHE_EQUATION_SEPARATOR_START` (string): The starting delimiter for block math equations. Default is `\[` for ChatGPT output. Markdown uses `$$`.
+- `BLOCK_MATHE_EQUATION_SEPARATOR_END` (string): The ending delimiter for block math equations. Default is `\]` for ChatGPT output. Markdown uses `$`.
+
+
+
 ## Execution
 
 After installing the dependencies, you can run the main script of the project with `pipenv`:
@@ -25,4 +45,9 @@ After installing the dependencies, you can run the main script of the project wi
 pipenv run python src/main.py
 ```
 
-T
+The programm will ask for the markdown text containing the mathematical formulas. 
+Approve that with `CMD + D`.
+After you have pasted the text, the programm waits, till the user switches to the notion app.
+When the user has switched to the notion app, the programm will start a countdown.
+After the countdown, the programm will insert a preformatted text and manipulate the text in notion to display the mathematical formulas correctly.
+The user should not interact with the computer till the programm has finished.

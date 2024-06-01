@@ -1,10 +1,10 @@
-import os
 import time
-import pygetwindow as gw
-from dotenv import load_dotenv
 
-load_dotenv()
-countdownLength = int(os.getenv('COUNTDOWN_LENGTH', '5'))
+import pygetwindow as gw
+
+from src.config import config
+
+countdownLength = config.COUNTDOWN_LENGTH
 
 
 def prompt_user_to_switch_to_notion(text_to_show_after_switch: str = 'Countdown starting...'):

@@ -1,28 +1,28 @@
 import re
 from typing import List
-
+from config import config  # Import the config instance from the config module
 from src.models import TextBlock
-
 
 def markdown_to_array(markdown_text: str) -> List[str]:
     """Splits the Markdown text into lines."""
     lines = markdown_text.split('\n')
     return lines
 
-
 def process_text_block(text_block: str) -> List[TextBlock]:
     """Processes a text block and creates a list of objects."""
     text_block = text_block.strip()  # Remove leading and trailing whitespace
 
-    round_pattern = re.compile(r'\\\((.*?)\\\)')
-    square_pattern = re.compile(r'\\\[(.*?)\\\]')
+    # Use the patterns from the config
+    round_pattern = re.compile(re.escape(config.INLINE_MATHE_EQUATION_SEPARATOR_START) + r'(.*?)' + re.escape(config.INLINE_MATHE_EQUATION_SEPARATOR_END))
+    square_pattern = re.compile(re.escape(config.BLOCK_MATHE_EQUATION_SEPARATOR_START) + r'(.*?)' + re.escape(config.BLOCK_MATHE_EQUATION_SEPARATOR_END))
 
     # Check for square bracket enclosed text first
     square_matches = list(square_pattern.finditer(text_block))
     if square_matches:
-        # We found text enclosed by \[ \], replace the brackets with $ and mark it as enclosed
-        return [{"text": text_block.replace("\\[", "$").replace("\\]", "$"), "at_start": True, "is_enclosed": True,
-                 "at_end": True}]
+        # We found text enclosed by the block math separators, replace the brackets with $ and mark it as enclosed
+        start_sep = re.escape(config.BLOCK_MATHE_EQUATION_SEPARATOR_START)
+        end_sep = re.escape(config.BLOCK_MATHE_EQUATION_SEPARATOR_END)
+        return [{"text": re.sub(f'{start_sep}|{end_sep}', '$', text_block), "at_start": True, "is_enclosed": True, "at_end": True}]
 
     # Process round bracket enclosed text
     matches = list(round_pattern.finditer(text_block))
@@ -39,13 +39,10 @@ def process_text_block(text_block: str) -> List[TextBlock]:
 
         # Text before the bracket
         if start > last_end:
-            parts.append(
-                {"text": text_block[last_end:start], "at_start": last_end == 0, "is_enclosed": False, "at_end": False})
+            parts.append({"text": text_block[last_end:start], "at_start": last_end == 0, "is_enclosed": False, "at_end": False})
 
         # Text within the bracket
-        parts.append(
-            {"text": enclosed_text.replace("\\(", "$").replace("\\)", "$"), "at_start": False, "is_enclosed": True,
-             "at_end": False})
+        parts.append({"text": enclosed_text.replace(config.INLINE_MATHE_EQUATION_SEPARATOR_START, "$").replace(config.INLINE_MATHE_EQUATION_SEPARATOR_END, "$"), "at_start": False, "is_enclosed": True, "at_end": False})
 
         last_end = end
 
@@ -57,7 +54,6 @@ def process_text_block(text_block: str) -> List[TextBlock]:
         parts[-1]["at_end"] = True
 
     return insert_empty_elements(parts)
-
 
 def insert_empty_elements(parts: List[TextBlock]) -> List[TextBlock]:
     """Inserts empty elements before and after enclosed text if needed."""
@@ -74,7 +70,6 @@ def insert_empty_elements(parts: List[TextBlock]) -> List[TextBlock]:
         else:
             result.append(part)
     return result
-
 
 def process_markdown_input() -> List[TextBlock]:
     """Reads the Markdown text input and returns the processed text blocks."""
@@ -98,3 +93,10 @@ def process_markdown_input() -> List[TextBlock]:
         processed_blocks.extend(process_text_block(block))
 
     return processed_blocks
+
+if __name__ == "__main__":
+    processed_blocks = process_markdown_input()
+    # Output the results
+    print("\nProcessed Text Blocks:")
+    for block in processed_blocks:
+        print(block)

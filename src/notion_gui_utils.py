@@ -1,14 +1,14 @@
-from typing import List
 import os
+import time
+from typing import List
+
 import pyautogui
 import pyperclip
-import time
+
+from src.config import config
 from src.models import TextBlock
-from dotenv import load_dotenv
 
-
-load_dotenv()
-time_to_sleep = float(os.getenv('TIME_TO_SLEEP', '0.02'))
+time_to_sleep = config.TIME_TO_SLEEP
 
 def copy_text():
     time.sleep(time_to_sleep)
@@ -86,6 +86,7 @@ def insert_text_blocks_and_convert_to_math_equations(text_blocks: List[TextBlock
     input_text_str = "\n".join([block["text"] for block in text_blocks])
     paste_text(input_text_str)
 
+    print(input_text_str)
     text_blocks_to_process = [block for block in text_blocks if block['text'] != ""]
 
     # Moving to first cell of the inserted text
