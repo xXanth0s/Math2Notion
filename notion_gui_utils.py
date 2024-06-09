@@ -82,7 +82,6 @@ class MathEquationInserter:
         self._press_key('down')
 
     def insert_text_blocks_and_convert_to_math_equations(self, text_blocks: List[TextBlock]):
-        print(text_blocks)
         input_text_str = "\n".join([block["text"] for block in text_blocks])
         self._paste_text(input_text_str)
 
