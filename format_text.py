@@ -71,6 +71,13 @@ def insert_empty_elements(parts: List[TextBlock]) -> List[TextBlock]:
             # Insert empty element after if not at the end
             if i == len(parts) - 1 or not parts[i + 1]['at_start']:
                 result.append({"text": "", "at_start": False, "is_enclosed": False, "at_end": False, "skip": False})
+
+        # Insert empty element if the text is a single dash, otherwise notion will completely ignore it.
+        # Happens for lists which will start with a math equation.
+        elif part['at_start'] and part['text'].strip() == "-":
+            if i == 0 or not parts[i - 1]['at_end']:
+                result.append({"text": "", "at_start": False, "is_enclosed": False, "at_end": False, "skip": False})
+            result.append(part)
         else:
             result.append(part)
     return result
