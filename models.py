@@ -5,4 +5,5 @@ class TextBlock(TypedDict):
     text: str
     at_start: bool
     is_enclosed: bool
+    skip: bool
     at_end: bool
