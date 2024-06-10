@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 from typing import List
 import pyautogui
@@ -60,7 +61,7 @@ class MathEquationInserter:
             if previous_Block['at_start'] and len(previous_Block['text']) <= 20:
                 # Moving to the end of the cell with shortcut for small cells, which are not just a new list
                 if previous_Block['text'].strip() != '-':
-                    self._press_key('right')
+                    self._press_hotkeys(['command', 'right'])
                     add_space = True
             else:
                 # Moving to the end of the cell
@@ -92,7 +93,6 @@ class MathEquationInserter:
 
     def insert_text_blocks_and_convert_to_math_equations(self, text_blocks: List[TextBlock]):
         input_text_str = "\n".join([block["text"] for block in text_blocks])
-        print(f"Inserting text: {input_text_str}")
         self._paste_text(input_text_str)
 
         time.sleep(1)
@@ -117,3 +117,8 @@ class MathEquationInserter:
                 skip_next = not text_block['at_end']
             self._press_key('down')
             previous_block = text_block
+
+        print(f"Inserting text has been completed.")
+        print(f"Switching the app will close the tool.")
+
+        sys.exit(0)

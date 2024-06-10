@@ -24,24 +24,21 @@ if __name__ == '__main__':
 
     def on_next(is_notion_in_foreground):
         global first_run
-        print(f"Is Notion in foreground? {is_notion_in_foreground}")
+
         if is_notion_in_foreground:
             print("Notion got selected. Starting with text insertion in 5 Seconds. When switching the app, "
                   "the programm will shut down.")
 
-            def delayed_task():
-                for i in range(config.COUNTDOWN_LENGTH, 0, -1):
-                    if stop_event.is_set():
-                        break
-                    print(f"{i}...")
-                    time.sleep(1)
-                if not stop_event.is_set():
-                    thread = threading.Thread(
-                        target=math_equation_inserter.insert_text_blocks_and_convert_to_math_equations,
-                        args=(input_text,))
-                    thread.start()
-
-            threading.Thread(target=delayed_task).start()
+            for i in range(config.COUNTDOWN_LENGTH, 0, -1):
+                if stop_event.is_set():
+                    break
+                print(f"{i}...")
+                time.sleep(1)
+            if not stop_event.is_set():
+                thread = threading.Thread(
+                    target=math_equation_inserter.insert_text_blocks_and_convert_to_math_equations,
+                    args=(input_text,))
+                thread.start()
 
 
         elif not first_run:
