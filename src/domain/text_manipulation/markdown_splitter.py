@@ -34,10 +34,8 @@ def split_multiline_markdown_text(text: str, separator: MarkdownSeparator) -> Li
     escaped_char = separator['separator']
     try:
         seperator_string = re.escape(escaped_char)
-        pattern = fr'^{seperator_string}(?:.*(?:\n(?!{seperator_string}|$).*)*)*'
-        # pattern = rf'^{seperator_string}.*?(?:\n(?!{seperator_string}|$|\n).*)*(?=\n\n|$)'
-        # pattern = fr'^{seperator_string}.*?(?=(?<!\n)\n{seperator_string}|\n\n|$)'
-        matches: List[str] = re.findall(pattern, text, re.DOTALL | re.MULTILINE)
+        pattern = re.compile(fr"^{seperator_string}.*(?:\n(?!{seperator_string}|\n).*)*", re.MULTILINE)
+        matches: List[str] = pattern.findall(text)
         return separate_text_by_separators(text, matches, False)
     except re.error as e:
         print(f"Regex-Fehler: {e}")

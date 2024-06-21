@@ -19,7 +19,7 @@ def test_simple_list_with_equations_at_start():
     Ein Markov-Entscheidungsprozess (MDP) \(D\) ist ein Tupel \(D = (S, A, P, R, s_0, S_t)\) mit:
     - \(S\): Menge der Zustände (Zustandsraum)
     - \(A\): Menge der Aktionen (Aktionsraum)
-    sfsdfsd
+    line in the list 
     
     - \(P: (S \setminus S_t) \times A \times S [0,1]\): Transitionswahrscheinlichkeitsfunktion, wobei \(\sum_{s' \in S} P(s, a, s') = 1\) für alle \(s \in S, a \in A\)
     - \(R: (S \setminus S_t) \times A \times S \mathbb{R}\): Belohnungsfunktion
@@ -201,4 +201,4 @@ def test_wild_mix_with_markdown_separators():
 
     text_blocks_without_whitespace = remove_empty_strings_from_array(text_blocks)
 
-    assert len(text_blocks_without_whitespace) == 11
+    assert len(text_blocks_without_whitespace) == 17
