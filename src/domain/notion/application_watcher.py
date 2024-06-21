@@ -2,7 +2,7 @@ import time
 
 import pygetwindow as gw
 
-from config import config
+from src.config import config
 
 countdownLength = config.COUNTDOWN_LENGTH
 

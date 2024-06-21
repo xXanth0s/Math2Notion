@@ -7,3 +7,7 @@ class TextBlock(TypedDict):
     is_enclosed: bool
     skip: bool
     at_end: bool
+
+class SimpleTextBlock(TypedDict):
+    text: str
+    skip: bool

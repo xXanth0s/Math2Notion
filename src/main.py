@@ -4,12 +4,15 @@ import threading
 import time
 
 from config import config
-from format_text import process_markdown_input
-from notion_gui_utils import MathEquationInserter
-from notion_window_observer import NotionWindowObserver
+from src.domain.text_manipulation.markdown_splitter import split_text_by_markdown_separators
+from src.models.MarkdownSeparator import all_markdown_separators
+from src.domain.text_manipulation.text_to_text_block_formatter import process_markdown_text_to_text_blocks
+from src.domain.notion.notion_gui_utils import MathEquationInserter
+from src.domain.notion.notion_window_observer import NotionWindowObserver
+from src.domain.cli.markdown_input_reader import read_markdown_input_from_console
 
 project_dir = os.path.abspath(os.path.dirname(__file__))
-src_dir = os.path.join(project_dir, 'src')
+src_dir = os.path.join(project_dir, '')
 
 sys.path.append(project_dir)
 sys.path.append(src_dir)
@@ -17,7 +20,11 @@ sys.path.append(src_dir)
 if __name__ == '__main__':
     stop_event = threading.Event()
     math_equation_inserter = MathEquationInserter(stop_event)
-    input_text = process_markdown_input()
+    markdown_input = read_markdown_input_from_console()
+    markdown_blocks = split_text_by_markdown_separators(markdown_input, all_markdown_separators)
+    input_text = process_markdown_text_to_text_blocks(markdown_blocks)
+
+
     notion_app_watcher = NotionWindowObserver(poll_interval=0.1)
 
     first_run = True

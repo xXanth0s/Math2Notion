@@ -73,7 +73,7 @@ BLOCK_MATHE_EQUATION_SEPARATOR_END=$$
 
 ## Build
 
-To make a new build, execute the following command:
+To make a new build, execute the following command in the `src` directory:
 
 ```bash
 pyinstaller --onefile main.py

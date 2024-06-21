@@ -1,7 +1,8 @@
 import re
 from typing import List
-from config import config  # Import the config instance from the config module
-from models import TextBlock
+
+from src.config import config
+from src.models.TextBlock import TextBlock
 
 """Splits the Markdown text into lines."""
 
@@ -28,6 +29,7 @@ def extract_math_code_blocks(text_block: str):
             block["skip"] = True
 
     return blocks
+
 
 def extract_code_blocks(text_block: str):
     blocks = process_text_block(text_block, '```', '```', '```')
@@ -87,6 +89,8 @@ def process_text_block(text_block: str, start_separator: str, end_separator: str
 
 
 def insert_empty_elements(parts: List[TextBlock]) -> List[TextBlock]:
+    if len(parts) == 1:
+        return parts
     """Inserts empty elements before and after enclosed text if needed."""
     result: List[TextBlock] = []
     for i, part in enumerate(parts):
@@ -109,29 +113,17 @@ def insert_empty_elements(parts: List[TextBlock]) -> List[TextBlock]:
             result.append(part)
     return result
 
-
-def get_text_from_user() -> str:
-    """Reads the Markdown text input and returns the processed text blocks."""
-    print("Please enter the Markdown text (finish with a line containing 'END'):")
-    markdown_text: List[str] = []
-    while True:
-        try:
-            line = input()
-            if line.strip().upper() == 'END':
-                break
-            markdown_text.append(line)
-        except EOFError:
-            break
-
-    return "\n".join(markdown_text)
+def map_string_list_to_text_blocks(string_list: List[str]) -> List[TextBlock]:
+    return [{"text": text, "at_start": True, "is_enclosed": False, "at_end": True, "skip": False} for text in string_list]
 
 
-def process_markdown_input() -> List[TextBlock]:
-    markdown_text_str = get_text_from_user()
-
+def process_markdown_text_to_text_blocks(markdown_blocks: List[str]) -> List[TextBlock]:
+    text_blocks = map_string_list_to_text_blocks(markdown_blocks)
+    # text_blocks = insert_empty_elements(text_blocks)
+    blocks_with_math_code_blocks: List[TextBlock] = []
+    for block in text_blocks:
+        blocks_with_math_code_blocks.extend(extract_math_code_blocks(block["text"]))
     # Math Code Blocks
-    blocks_with_math_code_blocks = extract_math_code_blocks(markdown_text_str)
-    # Code Blocks
 
     blocks_with_code: List[TextBlock] = []
     for block in blocks_with_math_code_blocks:
@@ -167,15 +159,3 @@ def process_markdown_input() -> List[TextBlock]:
                                                        config.INLINE_MATHE_EQUATION_SEPARATOR_END))
 
     return processed_blocks
-
-
-if __name__ == "__main__":
-    processed_blocks = process_markdown_input()
-    # Output the results
-    print("\nProcessed Text Blocks:")
-    for block in processed_blocks:
-        print(block)
-    # text = get_text_from_user()
-    # text_blocks_with_block_equations = process_text_block(text, '```math', '```')
-    #
-    # print(text_blocks_with_block_equations)

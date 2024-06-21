@@ -5,8 +5,9 @@ from typing import List
 import pyautogui
 import pyperclip
 from threading import Event
-from config import config
-from models import TextBlock
+
+from src.config import config
+from src.models.TextBlock import TextBlock
 
 
 class MathEquationInserter:
@@ -21,13 +22,6 @@ class MathEquationInserter:
         """)
         time.sleep(self.time_to_sleep)
         return pyperclip.paste()
-
-    def _paste_text(self, text: str):
-        pyperclip.copy(text)
-        time.sleep(self.time_to_sleep)
-        os.system("""
-        osascript -e 'tell application "System Events" to keystroke "v" using {command down}'
-        """)
 
     def _press_hotkeys(self, keys: List[str]):
         pyautogui.hotkey(*keys, interval=0.02)
@@ -91,9 +85,16 @@ class MathEquationInserter:
         # Switching to the next block
         self._press_key('down')
 
+    def paste_text(self, text: str):
+        pyperclip.copy(text)
+        time.sleep(self.time_to_sleep)
+        os.system("""
+        osascript -e 'tell application "System Events" to keystroke "v" using {command down}'
+        """)
+
     def insert_text_blocks_and_convert_to_math_equations(self, text_blocks: List[TextBlock]):
         input_text_str = "\n".join([block["text"] for block in text_blocks])
-        self._paste_text(input_text_str)
+        self.paste_text(input_text_str)
 
         time.sleep(1)
         text_blocks_to_process = [block for block in text_blocks if block['text'] != ""]

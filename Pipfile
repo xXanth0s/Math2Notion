@@ -9,6 +9,7 @@ pyautogui = "*"
 pyperclip = "*"
 pygetwindow = "*"
 pyinstaller = "*"
+typing_extensions = "*"
 
 [dev-packages]
 
