@@ -24,14 +24,12 @@ if __name__ == '__main__':
     markdown_blocks = split_text_by_markdown_separators(markdown_input, all_markdown_separators)
     input_text = process_markdown_text_to_text_blocks(markdown_blocks)
 
-
     notion_app_watcher = NotionWindowObserver(poll_interval=0.1)
 
     first_run = True
 
     def on_next(is_notion_in_foreground):
         global first_run
-
         if is_notion_in_foreground:
             print("Notion got selected. Starting with text insertion in 5 Seconds. When switching the app, "
                   "the programm will shut down.")
@@ -52,7 +50,6 @@ if __name__ == '__main__':
             print("Notion is not in focus anymore. The app will not continue with inserting the text.")
             notion_app_watcher.stop_polling()
             stop_event.set()
-
             sys.exit(0)
         first_run = False
 

@@ -9,7 +9,6 @@ from threading import Event
 from src.config import config
 from src.models.TextBlock import TextBlock
 
-
 class MathEquationInserter:
     def __init__(self, stop_event: Event):
         self.time_to_sleep = config.TIME_TO_SLEEP
@@ -35,7 +34,32 @@ class MathEquationInserter:
         self._press_hotkeys(['command', 'a'])
         self._press_key('right')
 
+    def _insert_block_equations(self, text: TextBlock):
+        self._press_key('enter')
+        time.sleep(self.time_to_sleep)
+        self._press_key('/')
+        os.system("""
+                osascript -e 'tell application "System Events" to keystroke "e"'
+                """)
+        os.system("""
+                osascript -e 'tell application "System Events" to keystroke "q"'
+                """)
+        time.sleep(self.time_to_sleep)
+
+
+        self._press_key('enter')
+        time.sleep(self.time_to_sleep)
+        self.paste_text(text['text'])
+        time.sleep(self.time_to_sleep)
+        self._press_key('esc')
+
+
     def _insert_math_equation(self, text: TextBlock, previous_Block: TextBlock = None):
+        if text['at_start'] and text['at_end']:
+            self._insert_block_equations(text)
+            return
+
+        self._press_key('down')
         self._press_key('enter')
 
         # Selecting all text with Cmd+A
@@ -92,8 +116,17 @@ class MathEquationInserter:
         osascript -e 'tell application "System Events" to keystroke "v" using {command down}'
         """)
 
+    def get_text_to_insert(self, text_blocks: List[TextBlock]) -> str:
+        # inserting dummy q for block equations, so notion will recognize it as its own block
+        adjusted_text_blocks = [
+            "" if block['at_start'] and block['is_enclosed'] and block['at_end'] else block['text']
+            for block in text_blocks
+        ]
+
+        return "\n".join(adjusted_text_blocks)
+
     def insert_text_blocks_and_convert_to_math_equations(self, text_blocks: List[TextBlock]):
-        input_text_str = "\n".join([block["text"] for block in text_blocks])
+        input_text_str = self.get_text_to_insert(text_blocks)
         self.paste_text(input_text_str)
 
         time.sleep(1)
@@ -107,6 +140,7 @@ class MathEquationInserter:
         self._press_key('esc')
         skip_next = False
         previous_block = None
+        is_first = True
         for text_block in text_blocks_to_process:
             if self.stop_event.is_set():
                 return
@@ -114,12 +148,16 @@ class MathEquationInserter:
                 skip_next = False
                 continue
             if text_block['is_enclosed']:
+                print('inserting math')
                 self._insert_math_equation(text_block, previous_block)
                 skip_next = not text_block['at_end']
-            self._press_key('down')
+            elif not is_first:
+                print('pressing down')
+                self._press_key('down')
             previous_block = text_block
+            is_first = False
 
         print(f"Inserting text has been completed.")
         print(f"Switching the app will close the tool.")
-
+        self.stop_event.set()
         sys.exit(0)
