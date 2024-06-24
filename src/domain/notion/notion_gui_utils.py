@@ -9,6 +9,7 @@ from threading import Event
 from src.config import config
 from src.models.TextBlock import TextBlock
 from src.utils.markdown_utils import is_text_simple_markdown_separator
+from src.utils.text_block_utils import is_block_equation
 
 
 class MathEquationInserter:
@@ -36,24 +37,31 @@ class MathEquationInserter:
         self._press_hotkeys(['command', 'a'])
         self._press_key('right')
 
-    def _insert_block_equations(self, text: TextBlock):
-        self._press_key('enter')
-        self._press_key('space')
-        time.sleep(self.time_to_sleep)
-        self._press_key('/')
-        os.system("""
-                osascript -e 'tell application "System Events" to keystroke "e"'
-                """)
-        os.system("""
-                osascript -e 'tell application "System Events" to keystroke "q"'
-                """)
-        time.sleep(self.time_to_sleep)
+    def _insert_block_equations(self, text: TextBlock, previous_block: TextBlock):
+        if is_block_equation(previous_block):
+            os.system("""
+                    osascript -e 'tell application "System Events" to keystroke "d" using {command down}'
+                    """)
+            time.sleep(self.time_to_sleep)
+            self._press_key('enter')
+        else:
+            self._press_key('enter')
+            self._press_key('space')
+            time.sleep(self.time_to_sleep)
+            self._press_key('/')
+            os.system("""
+                    osascript -e 'tell application "System Events" to keystroke "e"'
+                    """)
+            os.system("""
+                    osascript -e 'tell application "System Events" to keystroke "q"'
+                    """)
+            time.sleep(self.time_to_sleep)
 
 
-        self._press_key('enter')
-        time.sleep(self.time_to_sleep)
+            self._press_key('enter')
+            time.sleep(self.time_to_sleep)
         self.paste_text(text['text'])
-        time.sleep(self.time_to_sleep)
+        time.sleep(0.2)
         self._press_key('esc')
 
     def _insert_inline_equations(self, text: TextBlock, previous_block: TextBlock):
@@ -76,8 +84,8 @@ class MathEquationInserter:
         self._press_key('esc')
 
     def _insert_math_equation(self, text: TextBlock, previous_block: TextBlock = None):
-        if text['at_start'] and text['at_end']:
-            self._insert_block_equations(text)
+        if is_block_equation(text):
+            self._insert_block_equations(text, previous_block)
         else:
             self._insert_inline_equations(text, previous_block)
 
@@ -124,16 +132,14 @@ class MathEquationInserter:
                 skip_next = False
                 continue
             if text_block['is_enclosed']:
-                print('inserting math')
                 self._insert_math_equation(text_block, previous_block)
                 skip_next = not text_block['at_end']
             elif not is_first:
-                print('pressing down')
                 self._press_key('down')
             previous_block = text_block
             is_first = False
 
-        print(f"Inserting text has been completed.")
-        print(f"Switching the app will close the tool.")
+        print("Inserting text has been completed.")
+        print("Switching the app will close the tool.")
         self.stop_event.set()
         sys.exit(0)
