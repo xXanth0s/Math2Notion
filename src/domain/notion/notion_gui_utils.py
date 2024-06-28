@@ -48,15 +48,16 @@ class MathEquationInserter:
             self._press_key('enter')
             self._press_key('space')
             time.sleep(self.time_to_sleep)
-            self._press_key('/')
             os.system("""
-                    osascript -e 'tell application "System Events" to keystroke "e"'
-                    """)
+                osascript -e 'tell application "System Events" to keystroke "/"'
+            """)
             os.system("""
-                    osascript -e 'tell application "System Events" to keystroke "q"'
-                    """)
+                osascript -e 'tell application "System Events" to keystroke "e"'
+            """)
+            os.system("""
+                osascript -e 'tell application "System Events" to keystroke "q"'
+            """)
             time.sleep(self.time_to_sleep)
-
 
             self._press_key('enter')
             time.sleep(self.time_to_sleep)
@@ -74,7 +75,6 @@ class MathEquationInserter:
         time.sleep(self.time_to_sleep)
 
         if not text['at_end']:
-
             # Inserting space to have separation to the next content
             self._press_key('space')
 
