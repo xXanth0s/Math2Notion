@@ -61,20 +61,20 @@ class MathEquationInserter:
 
             self._press_key('enter')
             time.sleep(self.time_to_sleep)
-        self.paste_text(text['text'])
+        self.paste_text(text.text)
         time.sleep(0.2)
         self._press_key('esc')
 
     def _insert_inline_equations(self, text: TextBlock, previous_block: TextBlock):
         self._press_key('enter')
         # only add whitespace to previous text, if there is already text. Otherwise, the notion AI input will open
-        if not is_text_simple_markdown_separator(previous_block['text']):
+        if not is_text_simple_markdown_separator(previous_block.text):
             self._press_key('space')
 
-        self.paste_text(f"$${text['text'].strip()}$$")
+        self.paste_text(f"$${text.text.strip()}$$")
         time.sleep(self.time_to_sleep)
 
-        if not text['at_end']:
+        if not text.at_end:
             # Inserting space to have separation to the next content
             self._press_key('space')
 
@@ -103,18 +103,22 @@ class MathEquationInserter:
     def get_text_to_insert(self, text_blocks: List[TextBlock]) -> str:
         # inserting dummy q for block equations, so notion will recognize it as its own block
         adjusted_text_blocks = [
-            "" if block['is_enclosed'] else block['text']
+            "" if block.is_enclosed else block.text
             for block in text_blocks
         ]
 
         return "\n".join(adjusted_text_blocks)
 
+    def indent_text(self, indentations_count: int):
+        for _ in range(indentations_count):
+            self._press_key('tab')
+            
     def insert_text_blocks_and_convert_to_math_equations(self, text_blocks: List[TextBlock]):
         input_text_str = self.get_text_to_insert(text_blocks)
         self.paste_text(input_text_str)
 
         time.sleep(1)
-        text_blocks_to_process = [block for block in text_blocks if block['text'] != ""]
+        text_blocks_to_process = [block for block in text_blocks if block.text != ""]
 
         # Moving to first cell of the inserted text
         self._press_key('enter')
@@ -122,6 +126,9 @@ class MathEquationInserter:
 
         # Switch from text focus to block focus
         self._press_key('esc')
+        
+        # used for inline math equations. 
+        # When the element ist after the equation, it needs to be skipped, cause the line break will be removed
         skip_next = False
         previous_block = None
         is_first = True
@@ -131,11 +138,12 @@ class MathEquationInserter:
             if skip_next:
                 skip_next = False
                 continue
-            if text_block['is_enclosed']:
+            if text_block.is_enclosed:
                 self._insert_math_equation(text_block, previous_block)
-                skip_next = not text_block['at_end']
+                skip_next = not text_block.at_end
             elif not is_first:
                 self._press_key('down')
+            self.indent_text(text_block.indentations_count)
             previous_block = text_block
             is_first = False
 

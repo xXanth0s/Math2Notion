@@ -56,7 +56,7 @@ def process_text_block(text_block: SimpleTextBlock, start_separator: str, end_se
     matches = list(regex.finditer(text_block_text))
     if not matches:
         # No match found, create a direct object
-        return [TextBlock(text=text_block_text, at_start=True, is_enclosed=False, at_end=True, skip=False)]
+        return [TextBlock(text=text_block_text, at_start=True, is_enclosed=False, at_end=True, skip=False, indentations_count=text_block.indentations_count)]
 
     parts: List[TextBlock] = []
     last_end = 0

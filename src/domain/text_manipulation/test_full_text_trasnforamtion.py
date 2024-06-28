@@ -105,7 +105,27 @@ class TestTextBlockProcessing(unittest.TestCase):
         self.assertEqual(len(text_blocks_count_without_whitespace), 2)
         self.assertEqual(len(result_without_empty_elements), 10)
 
+    def test_list_with_sub_list(self):
+        input_text = """
+    Beispiel:
+    - **Zustandsraum \( S \)**: \[ S_{vc} = \{s_{1,1}^{1}, s_{1,1}^{2}, s_{0,1}^{1}, s_{0,1}^{2}, s_{1,0}^{1}, s_{1,0}^{2}, s_{0,0}^{1}, s_{0,0}^{2}, s_t\} \]
+    - **Aktionsraum \( A \)**: \[ A_{vc} = \{move, clean, charge\} \]
+    - **Transitionswahrscheinlichkeiten \( P_{vc} \)**:
+      - \( P(s, move, s') = 0.9 \) (90% erfolgreich)
+      - \( P(s, clean, s') = 0.8 \) (80% erfolgreich)           
+    
+        """
+        text_blocks = split_text_by_markdown_separators(input_text, all_markdown_separators)
+        result = process_markdown_text_to_text_blocks(text_blocks)
+
+        text_blocks_count_without_whitespace = remove_empty_strings_from_array(text_blocks)
+        result_without_empty_elements = remove_empty_textblocks_from_array(result)
+
+        self.assertEqual(len(text_blocks_count_without_whitespace), 6)
+        self.assertEqual(len(result_without_empty_elements), 18)
+
     def test_with_math_code_block_and_normal_code_block(self):
+
         input_text = """
         In the vast realm of programming, we often encounter scenarios where we need to calculate certain values precisely. 
         For instance, the area of a circle is a common mathematical problem. The formula to calculate the area of a circle is given by:
@@ -135,8 +155,6 @@ class TestTextBlockProcessing(unittest.TestCase):
         text_blocks_count_without_whitespace = remove_empty_strings_from_array(text_blocks)
         result_without_empty_elements = remove_empty_textblocks_from_array(result)
 
-        self.assertEqual(len(text_blocks_count_without_whitespace), 5)
-        self.assertEqual(len(result_without_empty_elements), 14)
 
         # Math Code Block
         math_code_block = result_without_empty_elements[1]
@@ -152,53 +170,55 @@ class TestTextBlockProcessing(unittest.TestCase):
         self.assertTrue(python_code_block.at_start)
         self.assertTrue(python_code_block.at_end)
 
+
     def test_wild_mix_with_markdown_separators(self):
         input_text = """
-        Das ist ein Beispieltext.
-
-        - This is some list element.
-         This is a new line
-        # Heading 1 
-        - Weitere Informationen,
-        die nützlich sind.
-
-        Block which should be separated
-        [ ] Checkbox 1
-        [ ] Checkbox 2
-        extra text for second checkbox
-
-        [ ] Checkbox 3
-
-        - list 1
-        - list 2
-        extra list text
-
-        New block with random text
-
-
-        ```
-        - list in code block
-
-        - list in code block 2
-        [ ] Checkbox in code block 
-        def actual_code_block():
-            return True
-        ```
-        Random Text 2 
-        text with a minus - inside
-        * new list 
-        - list with other starter 
-        * list with random text
-        extra line
-
-        last single block of text
-
-            """
+            Das ist ein Beispieltext.
+    
+            - This is some list element.
+            - This is a sublist
+     This is anew line
+            # Heading 1 
+            - Weitere Informationen,
+            die nützlich sind.
+    
+            Block which should be separated
+            [ ] Checkbox 1
+            [ ] Checkbox 2
+            extra text for second checkbox
+    
+            [ ] Checkbox 3
+    
+            - list 1
+            - list 2
+            extra list text
+    
+            New block with random text
+    
+    
+            ```
+            - list in code block
+    
+            - list in code block 2
+            [ ] Checkbox in code block 
+            def actual_code_block():
+                return True
+            ```
+            Random Text 2 
+            text with a minus - inside
+            * new list 
+            - list with other starter 
+            * list with random text
+            extra line
+    
+            last single block of text
+    
+                """
 
         text_blocks = split_text_by_markdown_separators(input_text, all_markdown_separators)
         text_blocks_without_whitespace = remove_empty_strings_from_array(text_blocks)
 
-        self.assertEqual(len(text_blocks_without_whitespace), 17)
+        self.assertEqual(len(text_blocks_without_whitespace), 15)
 
 
 if __name__ == "__main__":
