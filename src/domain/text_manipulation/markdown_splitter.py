@@ -1,9 +1,10 @@
 import re
 from typing import List
 
+from src.config import config
 from src.models.MarkdownSeparator import MarkdownSeparator
 from src.models.TextBlock import SimpleTextBlock
-from src.utils.array_utils import insert_between_elements_to_array
+from src.utils.text_utils import count_leading_spaces
 
 
 def strip_lines(text):
@@ -20,7 +21,9 @@ def separate_text_by_separators(text: str, separators: List[str], skip_separated
         if start > last_end:
             text_before = text[last_end:start].strip()
             result.append(SimpleTextBlock(text=text_before, skip=False))
-        result.append(SimpleTextBlock(text=separator, skip=skip_separated_text))
+        spaces = count_leading_spaces(separator)
+        indentations_count = spaces / config.SPACES_FOR_INDENTATION
+        result.append(SimpleTextBlock(text=separator, skip=skip_separated_text, indentations_count=indentations_count))
         last_end = start + len(separator)
 
     if last_end < len(text):
@@ -74,17 +77,16 @@ def split_markdown_text_by_markdown_separator(text: str, separator: MarkdownSepa
         return split_singleline_markdown_text(text, separator)
 
 
-def split_text_by_markdown_separators(text: str, separators: List[MarkdownSeparator]) -> List[str]:
+def split_text_by_markdown_separators(text: str, separators: List[MarkdownSeparator]) -> List[SimpleTextBlock]:
     separators = sorted(separators, key=lambda x: 'end_separator' not in x)
     stripped_text = strip_lines(text)
     parts = [SimpleTextBlock(text=stripped_text, skip=False)]
     for separator in separators:
         new_parts: [SimpleTextBlock] = []
         for current_part in parts:
-            if current_part['skip']:
+            if current_part.skip:
                 new_parts.append(current_part)
                 continue
-            new_parts.extend(split_markdown_text_by_markdown_separator(current_part['text'], separator))
+            new_parts.extend(split_markdown_text_by_markdown_separator(current_part.text, separator))
         parts = new_parts
-    final_parts = [text_part['text'] for text_part in parts]
-    return insert_between_elements_to_array(final_parts, '')
+    return parts
