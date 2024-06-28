@@ -55,6 +55,7 @@ These variables define the separators for inline and block mathematical equation
 ```bash
 TIME_TO_SLEEP=0.02
 COUNTDOWN_LENGTH=5
+SPACES_FOR_INDENTATION=2
 
 ## ChatGPT
 # INLINE_MATHE_EQUATION_SEPARATOR_START=\(
