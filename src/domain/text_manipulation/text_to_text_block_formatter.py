@@ -1,8 +1,8 @@
 import re
 from typing import List
 
-from src.config import config
-from src.models.TextBlock import TextBlock, SimpleTextBlock
+from config import config
+from models.TextBlock import TextBlock, SimpleTextBlock
 
 """Splits the Markdown text into lines."""
 

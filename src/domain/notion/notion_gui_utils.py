@@ -6,16 +6,17 @@ import pyautogui
 import pyperclip
 from threading import Event
 
-from src.config import config
-from src.models.TextBlock import TextBlock
-from src.utils.markdown_utils import is_text_simple_markdown_separator
-from src.utils.text_block_utils import is_block_equation
+from config import config
+from models.TextBlock import TextBlock
+from utils.markdown_utils import is_text_simple_markdown_separator
+from utils.text_block_utils import is_block_equation
 
 
 class MathEquationInserter:
     def __init__(self, stop_event: Event):
         self.time_to_sleep = config.TIME_TO_SLEEP
         self.stop_event = stop_event
+        self.pause_event = Event()
 
     def _copy_text(self):
         time.sleep(self.time_to_sleep)
@@ -122,6 +123,7 @@ class MathEquationInserter:
 
         # Moving to first cell of the inserted text
         self._press_key('enter')
+        self._press_key('enter')
         time.sleep(1)
 
         # Switch from text focus to block focus
@@ -135,6 +137,9 @@ class MathEquationInserter:
         for text_block in text_blocks_to_process:
             if self.stop_event.is_set():
                 return
+            if self.pause_event.is_set():
+                self.pause_event.wait()
+                
             if skip_next:
                 skip_next = False
                 continue

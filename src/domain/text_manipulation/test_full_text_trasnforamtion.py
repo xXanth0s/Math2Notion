@@ -1,9 +1,9 @@
 import unittest
 from typing import List
-from src.domain.text_manipulation.markdown_splitter import split_text_by_markdown_separators
-from src.models.MarkdownSeparator import all_markdown_separators
-from src.domain.text_manipulation.text_to_text_block_formatter import process_markdown_text_to_text_blocks
-from src.models.TextBlock import TextBlock, SimpleTextBlock
+from domain.text_manipulation.markdown_splitter import split_text_by_markdown_separators
+from models.MarkdownSeparator import all_markdown_separators
+from domain.text_manipulation.text_to_text_block_formatter import process_markdown_text_to_text_blocks
+from models.TextBlock import TextBlock, SimpleTextBlock
 
 
 def remove_empty_strings_from_array(arr: List[SimpleTextBlock]) -> List[SimpleTextBlock]:

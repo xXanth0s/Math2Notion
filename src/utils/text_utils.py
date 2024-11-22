@@ -1,6 +1,6 @@
 from typing import List
 
-from src.models.TextBlock import SimpleTextBlock
+from models.TextBlock import SimpleTextBlock
 
 
 def count_leading_spaces(string: str) -> int:

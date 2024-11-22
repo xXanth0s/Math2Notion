@@ -1,12 +1,12 @@
 import re
 from typing import List
 
-from src.config import config
-from src.models.MarkdownSeparator import MarkdownSeparator
-from src.models.TextBlock import SimpleTextBlock
-from src.utils.array_utils import insert_between_elements_to_array
-from src.utils.text_utils import count_leading_spaces
-from src.utils.text_utils import strip_all_line_breaks, remove_empty_lines
+from config import config
+from models.MarkdownSeparator import MarkdownSeparator
+from models.TextBlock import SimpleTextBlock
+from utils.array_utils import insert_between_elements_to_array
+from utils.text_utils import count_leading_spaces
+from utils.text_utils import strip_all_line_breaks, remove_empty_lines
 
 
 def strip_lines(text):

@@ -1,4 +1,4 @@
-from src.models.TextBlock import TextBlock
+from models.TextBlock import TextBlock
 
 
 def is_block_equation(text_bock: TextBlock) -> bool:

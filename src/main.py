@@ -4,12 +4,12 @@ import threading
 import time
 
 from config import config
-from src.domain.text_manipulation.markdown_splitter import split_text_by_markdown_separators
-from src.models.MarkdownSeparator import all_markdown_separators
-from src.domain.text_manipulation.text_to_text_block_formatter import process_markdown_text_to_text_blocks
-from src.domain.notion.notion_gui_utils import MathEquationInserter
-from src.domain.notion.notion_window_observer import NotionWindowObserver
-from src.domain.cli.markdown_input_reader import read_markdown_input_from_console
+from domain.text_manipulation.markdown_splitter import split_text_by_markdown_separators
+from models.MarkdownSeparator import all_markdown_separators
+from domain.text_manipulation.text_to_text_block_formatter import process_markdown_text_to_text_blocks
+from domain.notion.notion_gui_utils import MathEquationInserter
+from domain.notion.notion_window_observer import NotionWindowObserver
+from domain.cli.markdown_input_reader import read_markdown_input_from_console
 
 project_dir = os.path.abspath(os.path.dirname(__file__))
 src_dir = os.path.join(project_dir, '')

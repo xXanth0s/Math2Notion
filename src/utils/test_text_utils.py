@@ -1,6 +1,6 @@
 import unittest
 
-from src.utils.text_utils import count_leading_spaces
+from utils.text_utils import count_leading_spaces
 
 
 class TestCountLeadingSpaces(unittest.TestCase):

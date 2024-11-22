@@ -1,4 +1,4 @@
-from src.models.MarkdownSeparator import all_markdown_separators
+from models.MarkdownSeparator import all_markdown_separators
 
 
 def is_text_simple_markdown_separator(text: str) -> bool:
